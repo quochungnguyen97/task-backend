@@ -13,6 +13,9 @@ public interface TaskService extends JpaRepository<Task, String> {
     @Query("SELECT t FROM Task t WHERE t.username=:username AND t.deleted=0")
     List<Task> getTasksByUsername(@Param("username") String username);
 
+    @Query("SELECT t FROM Task t WHERE t.username=:username")
+    List<Task> getTasksByUsernameForSync(@Param("username") String username);
+
     @Query("SELECT t FROM Task t WHERE t.username=:username AND t.deleted=0 AND t.uuid=:uuid")
     Task getTaskById(@Param("username") String username, @Param("uuid") String uuid);
 
