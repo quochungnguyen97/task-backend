@@ -42,11 +42,10 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/{username}")
-    public ResponseEntity<User> getUser(@PathVariable("username") String username,
-                                        @RequestBody User body, HttpServletResponse response) {
+    @PostMapping(value = "/login/")
+    public ResponseEntity<User> login(@RequestBody User body, HttpServletResponse response) {
         try {
-            User user = mUserService.getReferenceById(username);
+            User user = mUserService.getReferenceById(body.getUsername());
             if (mPasswordHashable.verifyHash(body.getPassword(), user.getPassword())) {
                 response.setHeader(AuthConstants.AUTH_HEADER_TOKEN_KEY, mUserAuth.generateToken(user, -1L));
                 user.setPassword(StringUtils.EMPTY);
@@ -56,7 +55,7 @@ public class UserController {
                 return new ResponseEntity<>(user, HttpStatus.UNAUTHORIZED);
             }
         } catch (EntityNotFoundException e) {
-            System.out.println("getUser " + username + " error " + e.getLocalizedMessage());
+            System.out.println("getUser " + body.getUsername() + " error " + e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
