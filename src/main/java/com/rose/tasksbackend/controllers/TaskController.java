@@ -1,5 +1,6 @@
 package com.rose.tasksbackend.controllers;
 
+import com.rose.tasksbackend.common.StringUtils;
 import com.rose.tasksbackend.data.Task;
 import com.rose.tasksbackend.data.User;
 import com.rose.tasksbackend.helpers.hashable.PasswordHashableFactory;
@@ -66,7 +67,9 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        body.setUuid(UUID.randomUUID().toString());
+        if (StringUtils.isBlankOrEmpty(body.getUuid())) {
+            body.setUuid(UUID.randomUUID().toString());
+        }
         long current = System.currentTimeMillis();
         body.setCreatedTime(current);
         body.setModifiedTime(current);
@@ -94,7 +97,7 @@ public class TaskController {
     }
 
     @DeleteMapping(path = "/{uuid}")
-    public ResponseEntity<Task> updateTask(@RequestHeader(AuthConstants.AUTH_HEADER_TOKEN_KEY) String token,
+    public ResponseEntity<Task> deleteTask(@RequestHeader(AuthConstants.AUTH_HEADER_TOKEN_KEY) String token,
                                            @PathVariable("uuid") String uuid) {
         User user = mUserAuth.authorizeToken(token);
         if (user == null) {
