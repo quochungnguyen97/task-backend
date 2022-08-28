@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -107,5 +108,29 @@ public class Task implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean isSameData(Task task) {
+        return Objects.equals(this.uuid, task.uuid) &&
+                Objects.equals(this.title, task.title) &&
+                this.completed == task.completed &&
+                this.status == task.status &&
+                this.deadline == task.deadline &&
+                this.deleted == task.deleted;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "uuid='" + uuid + '\'' +
+                ", title='" + title + '\'' +
+                ", completed=" + completed +
+                ", status=" + status +
+                ", deadline=" + deadline +
+                ", createdTime=" + createdTime +
+                ", modifiedTime=" + modifiedTime +
+                ", deleted=" + deleted +
+                ", username='" + username + '\'' +
+                '}';
     }
 }

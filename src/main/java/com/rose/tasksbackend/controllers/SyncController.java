@@ -1,6 +1,6 @@
 package com.rose.tasksbackend.controllers;
 
-import com.rose.tasksbackend.common.StringUtils;
+import com.rose.tasksbackend.common.TaskServerLog;
 import com.rose.tasksbackend.data.Task;
 import com.rose.tasksbackend.data.User;
 import com.rose.tasksbackend.helpers.hashable.PasswordHashableFactory;
@@ -14,12 +14,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "api/v1/sync")
 public class SyncController {
+    private static final String TAG = "SyncController";
+
     private final TaskService mTaskService;
     private final UserAuth mUserAuth;
 
@@ -49,7 +53,7 @@ public class SyncController {
         for (Task task: serverTasks) {
             if (clientTasksMap.containsKey(task.getUuid())) {
                 Task clientTask = clientTasksMap.get(task.getUuid());
-                if (clientTask.getModifiedTime() > task.getCreatedTime()) {
+                if (clientTask.getModifiedTime() > task.getModifiedTime()) {
                     updatedTasks.add(clientTask);
                 } else {
                     responseTasks.add(task);
@@ -65,9 +69,23 @@ public class SyncController {
             }
         }
 
+//        TaskServerLog.i(TAG, "syncTasks");
+//        logTasks("clientTasks:", clientTasks);
+//        logTasks("serverTasks:", serverTasks);
+//        logTasks("responseTasks:", responseTasks);
+//        logTasks("updatedTasks:", updatedTasks);
+
+        // TODO check if updated task has same username
         mTaskService.saveAll(updatedTasks.stream().peek(task -> task.setUsername(user.getUsername()))
                 .collect(Collectors.toList()));
 
         return new ResponseEntity<>(responseTasks, HttpStatus.OK);
+    }
+
+    private static void logTasks(String listName, List<Task> tasks) {
+        TaskServerLog.i(TAG, listName);
+        for (Task task: tasks) {
+            TaskServerLog.i(TAG, task.toString());
+        }
     }
 }
