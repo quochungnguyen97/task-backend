@@ -14,9 +14,7 @@
 	<name>tasksbackend</name>
 	<description>Tasks Backend</description>
 	<properties>
-		<java.version>11</java.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<java.version>8</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
