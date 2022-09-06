@@ -42,6 +42,18 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping(value = "/info/")
+    public ResponseEntity<User> getUser(@RequestHeader(AuthConstants.AUTH_HEADER_TOKEN_KEY) String token) {
+        User user = mUserAuth.authorizeToken(token);
+
+        if (user != null) {
+            user.setPassword(StringUtils.EMPTY);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
     @PostMapping(value = "/login/")
     public ResponseEntity<User> login(@RequestBody User body, HttpServletResponse response) {
         try {
