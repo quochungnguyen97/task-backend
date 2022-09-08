@@ -8,6 +8,6 @@ public class UserAuthFactory {
     }
 
     public static UserAuth newUserAuth(UserService userService, PasswordHashable passwordHashable) {
-        return new UPAuth(userService, passwordHashable);
+        return new EncryptedAuth(userService, passwordHashable);
     }
 }

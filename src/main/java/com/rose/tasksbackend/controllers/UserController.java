@@ -30,7 +30,7 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         mUserService = userService;
-        mPasswordHashable = PasswordHashableFactory.newPasswordHashable(PasswordHashableFactory.FAKE);
+        mPasswordHashable = PasswordHashableFactory.newPasswordHashable();
         mUserAuth = UserAuthFactory.newUserAuth(mUserService, mPasswordHashable);
     }
 
@@ -59,7 +59,10 @@ public class UserController {
         try {
             User user = mUserService.getReferenceById(body.getUsername());
             if (mPasswordHashable.verifyHash(body.getPassword(), user.getPassword())) {
-                response.setHeader(AuthConstants.AUTH_HEADER_TOKEN_KEY, mUserAuth.generateToken(user, -1L));
+                response.setHeader(
+                        AuthConstants.AUTH_HEADER_TOKEN_KEY,
+                        mUserAuth.generateToken(body, -1L)
+                );
                 user.setPassword(StringUtils.EMPTY);
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } else {

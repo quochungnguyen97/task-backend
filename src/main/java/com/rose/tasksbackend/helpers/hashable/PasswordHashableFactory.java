@@ -7,7 +7,7 @@ public class PasswordHashableFactory {
     public static final int FAKE = 0;
     public static final int REAL = 1;
 
-    public static PasswordHashable newPasswordHashable(int type) {
-        return new FakePasswordHashable();
+    public static PasswordHashable newPasswordHashable() {
+        return new EncryptedPasswordHashable();
     }
 }

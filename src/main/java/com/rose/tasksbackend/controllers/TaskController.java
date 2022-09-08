@@ -28,7 +28,7 @@ public class TaskController {
     public TaskController(UserService userService, TaskService taskService) {
         mTaskService = taskService;
         mUserAuth = UserAuthFactory.newUserAuth(userService,
-                PasswordHashableFactory.newPasswordHashable(PasswordHashableFactory.FAKE));
+                PasswordHashableFactory.newPasswordHashable());
     }
 
     @GetMapping(path = "/")

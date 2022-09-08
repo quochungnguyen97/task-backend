@@ -10,16 +10,16 @@ import java.util.List;
 
 @Repository
 public interface TaskService extends JpaRepository<Task, String> {
-    @Query("SELECT t FROM Task t WHERE t.username=:username AND t.deleted=0")
+    @Query("SELECT t FROM Task t WHERE t.username=:username AND t.deleted=False")
     List<Task> getTasksByUsername(@Param("username") String username);
 
     @Query("SELECT t FROM Task t WHERE t.username=:username")
     List<Task> getTasksByUsernameForSync(@Param("username") String username);
 
-    @Query("SELECT t FROM Task t WHERE t.username=:username AND t.deleted=0 AND t.uuid=:uuid")
+    @Query("SELECT t FROM Task t WHERE t.username=:username AND t.deleted=False AND t.uuid=:uuid")
     Task getTaskById(@Param("username") String username, @Param("uuid") String uuid);
 
-    @Query("SELECT COUNT(t) FROM Task t WHERE t.username=:username AND t.uuid=:uuid AND t.deleted=0")
+    @Query("SELECT COUNT(t) FROM Task t WHERE t.username=:username AND t.uuid=:uuid AND t.deleted=False")
     long getTaskIdCount(@Param("username") String username, @Param("uuid") String uuid);
 
     default boolean isTaskIdExisted(String username, String uuid) {

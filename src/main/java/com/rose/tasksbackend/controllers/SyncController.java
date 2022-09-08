@@ -31,7 +31,7 @@ public class SyncController {
     public SyncController(UserService userService, TaskService taskService) {
         mTaskService = taskService;
         mUserAuth = UserAuthFactory.newUserAuth(userService,
-                PasswordHashableFactory.newPasswordHashable(PasswordHashableFactory.FAKE));
+                PasswordHashableFactory.newPasswordHashable());
     }
 
     @PostMapping(path = "/")
